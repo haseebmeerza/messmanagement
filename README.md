@@ -20,5 +20,11 @@ Monthly meal-subscription mess app (Ajman, UAE). Google Sheet = database, Google
 Android Chrome: open the Pages link > menu (3 dots) > Install app. iPhone Safari: Share > Add to Home Screen.
 For a real APK: pwabuilder.com > enter the Pages link > Package for Android.
 
+## Get the APK (automatic build)
+Every time you commit to `main`, GitHub Actions builds `HM-Mess.apk`.
+Repo > Releases (right side) > latest "HM Mess APK build" > download `HM-Mess.apk` and install it on Android (allow "Install unknown apps" if asked).
+Or: Actions tab > latest run > Artifacts > HM-Mess-APK.
+Workflow file: `.github/workflows/build-apk.yml`.
+
 ## Security
 Never commit passwords, keys or Web app URLs of real client data. Share each Sheet only with its owner.
