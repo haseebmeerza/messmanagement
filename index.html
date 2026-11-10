@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Haseeb Mirza Mess Management</title><meta name="theme-color" content="#1f4d3a">
+<title>Haseeb Mirza Mess Management</title><meta name="theme-color" content="#1f4d3a"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
 <style>
 :root{--g:#1f4d3a;--c:#faf5e9;--t:#c2572b;--gold:#b8963e;--ink:#2b2b2b;--wa:#25D366}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -82,11 +82,11 @@ async function api(a,p={}){
   const r=await fetch(API,{method:'POST',body:JSON.stringify({a,token:tok,...p})});const j=await r.json();
   if(j.error){if(j.error==='LOGIN')logout();throw new Error(j.error)}return j}
 function logout(){sessionStorage.removeItem('t');tok=null;D=null;showLogin()}
-function showLogin(){$('nv').style.display=$('addb').style.display='none';
+function showLogin(edit){$('nv').style.display=$('addb').style.display='none';
   $('app').innerHTML=`<div id="login" class="box"><div class="lg"><img src="${LOGO}" alt="HM logo"></div><div class="lf"><h2>${'Haseeb Mirza Mess'}</h2><p>Mess Management System</p>
   ${NEED_PW?'<input id="pw" type="password" placeholder="Password" onkeydown="if(event.key===\'Enter\')doLogin()">':''}
   <button class="btn" style="width:100%" onclick="doLogin()">Login</button></div></div>
-  <div class="box" style="max-width:520px;margin:0 auto"><label>${okApi()?'Connection is set ✓':'Step 1 — paste your Apps Script Web app URL (ends with /exec)'}</label>
+  ${okApi()&&!edit?'<p style="text-align:center;font-size:.8em"><a href="#" onclick="showLogin(true);return false">Change connection</a></p>':''}<div class="box" style="max-width:520px;margin:0 auto;display:${okApi()&&!edit?'none':'block'}"><label>${okApi()?'Connection is set ✓':'Step 1 — paste your Apps Script Web app URL (ends with /exec)'}</label>
   <input id="apiurl" placeholder="https://script.google.com/macros/s/.../exec" value="${esc(API)}"><button class="btn o" onclick="saveApi()">Save connection</button></div>`}
 function saveApi(){const v=$('apiurl').value.trim();if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(v))return toast('URL must start with https://script.google.com and end with /exec');API=v;localStorage.setItem('api',v);toast('Connection saved');showLogin()}
 async function doLogin(){try{const j=await api('login',{password:NEED_PW?$('pw').value:''});tok=j.token;sessionStorage.setItem('t',tok);start()}catch(e){toast(e.message)}}
@@ -173,4 +173,5 @@ async function setSt(id,s){if(!confirm(`Set this customer to ${s}?`))return;awai
 async function act(a,p){if(busy)return;busy=true;try{D=await api(a,p);closeM();toast('Saved');render()}catch(e){toast(e.message)}finally{busy=false}}
 $('hlogo').src=LOGO;
 tok?start():showLogin();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script></body></html>
